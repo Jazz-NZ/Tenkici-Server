@@ -10,20 +10,25 @@ import java.util.Scanner;
 public class ClientHandler extends Thread {
 	
 	Socket clientSocket = null;
+	String player = null;
+	
 	BufferedReader inputFromClient = null;
 	PrintStream outputToClient = null;
+	
 	public String clientUsername = null;
 	Scanner sc= new Scanner(System.in);
-	String player = null;
+	
 	private String init1X = "200";
 	private String init1Y = "550";
 	
 	private String init2X = "400";
 	private String init2Y = "550";	
 	
+	boolean wantToSuspendThread = false;
+	
 	public ClientHandler(Socket clientSocket, String playerNum) {
 		this.clientSocket = clientSocket;
-		player = playerNum;
+		this.player = playerNum;
 	}
 	
 	public void send(String data) {
@@ -32,10 +37,13 @@ public class ClientHandler extends Thread {
 		
 	}
 	
-	
 	@Override
 	public void run() {
+		
+		System.out.println("ClientHandler zapocet");
+		
 		try {
+			
 			inputFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));//init inputStream
 			outputToClient = new PrintStream(clientSocket.getOutputStream());//init outputStream
 			
@@ -44,31 +52,44 @@ public class ClientHandler extends Thread {
 			String x = "50";
 			//voditi racuna mora printLN zbog readline() na klijentskoj strani
 			if(player.contains("1")) {
-			outputToClient.println(player); //player+","+init1X+","+init1Y
-			System.out.println("Igrac 1 inicijalizovan");
+				
+				Server.initializePlayer1();
+				
+				outputToClient.println(player); //player+","+init1X+","+init1Y
+				System.out.println("Igrac 1 inicijalizovan");
+				System.out.println();
+				
+				
+				System.out.println(Thread.currentThread().getName());
+			
 			}else {
+				
+				Server.initializePlayer2();
+				
 				outputToClient.println(player);
 				System.out.println("Igrac 2 inicijalizovan");
+				System.out.println();
+				
+				
+				System.out.println(Thread.currentThread().getName());
 				
 			}
 			
 			
-			String text;
-			
-			  while(true) {
-				  String data = inputFromClient.readLine();
-				  System.out.println(player+","+data); 
-			  if(player.contains("1")) {
+			while(true) {
 				  
-				  Server.sendToP2(player+","+data);
-				  
-			  }else {
-				  Server.sendToP1(player+","+data);
-			  }
-			  
-			  
-			  }
-			 
+				String data = inputFromClient.readLine();
+				System.out.println(player + "," + data); 
+				
+				if(player.contains("1")) {
+					Server.sendToP2(player + "," + data);
+					  
+				}else {
+					Server.sendToP1(player + "," + data);
+					  
+				}	
+				
+			}
 			
 			/*
 			 * while(true){ //endless loop until client notifies us he wants to quit String
@@ -84,4 +105,7 @@ public class ClientHandler extends Thread {
 		}
 	
 	}
+
+	
+
 }
