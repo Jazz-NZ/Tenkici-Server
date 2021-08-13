@@ -78,25 +78,10 @@ public class Server {
 		
 		player1.send(data);
 		
-		
-		
 	}
 	public synchronized static void sendToP2(String data) {
 		
 		player2.send(data);
-	
-		
-		
-	}
-	
-	public synchronized static void sendBulletToP1(int x, int y) {
-		
-		
-		
-		
-	}
-	public synchronized static void sendBulletToP2( int x, int y) {
-		
 		
 	}
 	

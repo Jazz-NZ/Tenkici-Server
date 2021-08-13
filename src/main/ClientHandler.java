@@ -60,7 +60,6 @@ public class ClientHandler extends Thread {
 				System.out.println();
 				
 				
-				System.out.println(Thread.currentThread().getName());
 			
 			}else {
 				
@@ -70,8 +69,6 @@ public class ClientHandler extends Thread {
 				System.out.println("Igrac 2 inicijalizovan");
 				System.out.println();
 				
-				
-				System.out.println(Thread.currentThread().getName());
 				
 			}
 			
